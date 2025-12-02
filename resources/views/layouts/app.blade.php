@@ -12,7 +12,7 @@
 
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('products') }}">Product App</a>
+            <a class="navbar-brand" href="{{ route('products.index') }}">Product App</a>
         </div>
     </nav>
 

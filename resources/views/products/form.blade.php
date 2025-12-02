@@ -7,16 +7,21 @@
 <h2>{{ isset($product) ? 'Edit Product' : 'Create New Product' }}</h2>
 <hr>
 
-<form 
-    action="{{ isset($product) ? route('products.update', $product->id) : route('products.store') }}" 
-    method="POST">
-
+<form action="{{ isset($product) ? route('products.update', $product->id) : route('products.store') }}" method="POST">
     @csrf
+    @if(isset($product))
+        @method('PUT')
+    @endif
 
     <div class="mb-3">
         <label class="form-label">Nama produk</label>
         <input type="text" name="name" class="form-control"
                value="{{ old('name', $product->name ?? '') }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Deskripsi</label>
+        <textarea name="description" class="form-control" rows="3">{{ old('description', $product->description ?? '') }}</textarea>
     </div>
 
     <div class="mb-3">
@@ -26,8 +31,28 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Deskripsi</label>
-        <textarea name="description" class="form-control" rows="4">{{ old('description', $product->description ?? '') }}</textarea>
+        <label class="form-label">Warna</label>
+        <input type="text" name="color" class="form-control"
+               value="{{ old('color', $product->color ?? '') }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ukuran</label>
+        <input type="text" name="size" class="form-control"
+               value="{{ old('size', $product->size ?? '') }}" required>
+    </div>
+
+    {{-- DROPDOWN KATEGORI --}}
+    <div class="mb-3">
+        <label class="form-label">Kategori</label>
+        <select name="category_id" class="form-select" required>
+            @foreach($categories as $id => $name)
+                <option value="{{ $id }}"
+                    {{ old('category_id', $product->category_id ?? '') == $id ? 'selected' : '' }}>
+                    {{ $name }}
+                </option>
+            @endforeach
+        </select>
     </div>
 
     <div class="mb-3">
@@ -35,25 +60,25 @@
         <input type="text" name="image" class="form-control"
                value="{{ old('image', $product->image ?? '') }}">
         <small class="text-muted">
-            Masukkan nama file gambar yang disimpan di folder <strong>/public/img/</strong>
-            (contoh: <em>diffuser1.jpg</em>)
+            Masukkan nama file gambar di folder <b>/public/img/</b>
         </small>
     </div>
 
     @if(isset($product) && $product->image)
         <div class="mb-3">
-            <label class="form-label">Gambar sebelumnya</label><br>
+            <label class="form-label">Gambar Saat Ini</label><br>
             <img src="{{ asset('img/' . $product->image) }}" width="200" class="border rounded">
         </div>
     @endif
-
-    <hr>
 
     <button type="submit" class="btn btn-primary">
         {{ isset($product) ? 'Update Product' : 'Create Product' }}
     </button>
 
-    <a href="{{ route('products') }}" class="btn btn-secondary">Back</a>
+    <a href="{{ route('products.index') }}" class="btn btn-secondary">Back</a>
+
 </form>
 
 @endsection
+
+

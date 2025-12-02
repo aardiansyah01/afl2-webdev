@@ -3,42 +3,65 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 
 class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $products = [
-            ['Keyboard Mechanical', 'Keyboard gaming RGB switch biru', 450000, 'keyboard.jpg'],
-            ['Mouse Gaming', 'Mouse gaming 6 tombol dengan LED', 250000, 'mouse.jpg'],
-            ['Headset RGB', 'Headset gaming noise cancelling', 350000, 'headset.jpg'],
-            ['Monitor 24 Inch', 'Monitor full HD 75Hz panel IPS', 1450000, 'monitor.jpg'],
-            ['Laptop Stand', 'Stand aluminium untuk laptop', 120000, 'stand.jpg'],
-            ['USB Hub 4 Port', 'Hub USB 3.0 kecepatan tinggi', 90000, 'usbhub.jpg'],
-            ['Webcam HD', 'Webcam 1080p untuk meeting online', 200000, 'webcam.jpg'],
-            ['Microphone Condenser', 'Mic condenser untuk streaming', 300000, 'mic.jpg'],
-            ['Speaker Bluetooth', 'Speaker portable dengan bass kuat', 220000, 'speaker.jpg'],
-            ['Powerbank 20.000mAh', 'Powerbank fast charging', 180000, 'powerbank.jpg'],
-            ['Tripod Kamera', 'Tripod aluminium ringan', 160000, 'tripod.jpg'],
-            ['Ring Light', 'Ring light 26cm untuk konten creator', 140000, 'ringlight.jpg'],
-            ['Charger 33W', 'Charger fast charging 33W', 90000, 'charger.jpg'],
-            ['Cable Type-C', 'Kabel type-c braided 1 meter', 40000, 'cable.jpg'],
-            ['Flashdisk 64GB', 'Flashdisk USB 3.0', 70000, 'flashdisk.jpg'],
-            ['SSD 256GB', 'SSD SATA kecepatan tinggi', 350000, 'ssd.jpg'],
-            ['Harddisk 1TB', 'HDD external portable 1TB', 650000, 'hdd.jpg'],
-            ['Keyboard Wireless', 'Keyboard wireless minimalis', 180000, 'keyboard2.jpg'],
-            ['Mouse Wireless', 'Mouse wireless silent click', 75000, 'mouse2.jpg'],
-            ['Bluetooth Earbuds', 'TWS earbuds dengan low latency', 300000, 'tws.jpg'],
+        $productNames = [
+            'Baju' => [
+                'Kaos Polos', 'Kaos Oversize', 'Kaos Graphic', 'Kaos Sport', 'Kaos Vintage',
+                'Kemeja Flanel', 'Kemeja Lengan Panjang', 'Kemeja Slim Fit', 'Kemeja Linen', 'Kemeja Batik',
+                'Sweater Rajut', 'Sweater Hoodie', 'Cardigan Rajut', 'Crewneck Premium', 'T-Shirt Basic',
+                'Kaos Raglan', 'T-Shirt Streetwear', 'Kaos Tie Dye', 'Kaos Distressed', 'Kaos Pocket',
+                'Hoodie Premium', 'Hoodie Fleece', 'Hoodie Zipper', 'Hoodie Lightweight', 'Jersey Sport',
+                'Kaos Outdoor', 'Kaos Travel', 'Kaos Compression', 'Kaos Dry Fit', 'Kaos Training'
+            ],
+            'Celana' => [
+                'Celana Jeans Slim Fit', 'Celana Jeans Straight', 'Celana Chino', 'Celana Jogger',
+                'Celana Cargo', 'Celana Kulot', 'Celana Pendek Jeans', 'Celana Pendek Chino', 'Celana Track',
+                'Celana Training', 'Celana Sweatpants', 'Celana Hiking', 'Celana Outdoor', 'Celana Baggy',
+                'Celana Wide Leg', 'Celana Kulot Linen', 'Celana Formal Slim Fit', 'Celana Suit Pants',
+                'Celana Stretch', 'Celana Taktikal', 'Celana Army', 'Celana Loose Fit', 'Celana Travel',
+                'Celana Anti Air', 'Celana Kasual Harian', 'Celana Sport', 'Celana Yoga', 'Celana Running',
+                'Celana Polyester', 'Celana High Waist'
+            ],
+            'Jaket' => [
+                'Jaket Bomber', 'Jaket Varsity', 'Jaket Denim', 'Jaket Kulit Premium', 'Jaket Parasut',
+                'Jaket Waterproof', 'Jaket Windbreaker', 'Jaket Parka', 'Jaket Hoodie Tebal', 'Jaket Fleece',
+                'Jaket Outdoor', 'Jaket Gunung', 'Jaket Touring', 'Jaket Tactical', 'Jaket Casual',
+                'Jaket Harrington', 'Jaket Trucker', 'Jaket Lightweight', 'Jaket Softshell', 'Jaket Oversize',
+                'Jaket Sweater Hoodie', 'Jaket Quilt', 'Jaket Bubble', 'Jaket Bomber Nylon', 'Jaket Varsity Fleece',
+                'Jaket Raincoat', 'Jaket Urban Wear', 'Jaket Retro', 'Jaket Classic Fit', 'Jaket Premium Series'
+            ],
         ];
 
-        foreach ($products as $p) {
-            Product::create([
-                'name' => $p[0],
-                'description' => $p[1],
-                'price' => $p[2],
-                'image' => $p[3],
-            ]);
+        // Warna random
+        $colors = ['Hitam', 'Putih', 'Abu-Abu', 'Biru', 'Merah', 'Hijau', 'Coklat', 'Cream', 'Navy', 'Maroon'];
+
+        // Ukuran random
+        $sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+
+        $categories = Category::all();
+
+        foreach ($categories as $category) {
+            $names = $productNames[$category->name];
+
+            foreach ($names as $name) {
+                DB::table('products')->insert([
+                    'name'        => $name,
+                    'description' => "$name adalah produk kategori {$category->name} yang dibuat dengan bahan berkualitas tinggi, nyaman digunakan, dan cocok untuk berbagai aktivitas.",
+                    'price'       => rand(50000, 300000),
+                    'category_id' => $category->id,
+                    'color'       => $colors[array_rand($colors)],
+                    'size'        => $sizes[array_rand($sizes)],
+                    'image_url'   => "https://picsum.photos/seed/" . rand(1, 9999) . "/600/600",
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
+                ]);
+            }
         }
     }
 }

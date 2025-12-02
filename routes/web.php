@@ -12,21 +12,21 @@ Route::prefix('products')
     ->controller(ProductController::class)
     ->group(function () {
 
-        //List
-        Route::get('/', 'index')->name('products');
+        // List Produk
+        Route::get('/', 'index')->name('products.index');
 
-        //Form creat
+        // Form create
         Route::get('/create', 'create')->name('products.create');
 
-        //store
+        // Store
         Route::post('/store', 'store')->name('products.store');
 
-        //Form edit
+        // Edit form
         Route::get('/edit/{id}', 'edit')->name('products.edit');
 
         // Update
-        Route::post('/update/{id}', 'update')->name('products.update');
+        Route::put('/update/{id}', 'update')->name('products.update');
 
-        //halaman detail
+        // Detail
         Route::get('/show/{id}', 'show')->name('products.show');
-});
+    });
