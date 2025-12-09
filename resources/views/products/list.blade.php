@@ -18,7 +18,12 @@
     </button>
 
     {{-- Sorting --}}
+    {{-- Sorting --}}
     <form method="GET" class="d-flex">
+        <input type="hidden" name="min_price" value="{{ $min_price }}">
+        <input type="hidden" name="max_price" value="{{ $max_price }}">
+        <input type="hidden" name="search" value="{{ $search }}">
+
         <select name="sort" class="form-select me-2">
             <option value="name"  {{ $sort == 'name' ? 'selected' : '' }}>Nama</option>
             <option value="price" {{ $sort == 'price' ? 'selected' : '' }}>Harga</option>
@@ -31,7 +36,6 @@
 
         <button type="submit" class="btn btn-dark">Urutkan</button>
     </form>
-
 </div>
 
 {{-- Filter Harga --}}
@@ -81,7 +85,17 @@
         <tr>
             <td>{{ $p->name }}</td>
             <td>Rp {{ number_format($p->price, 0, ',', '.') }}</td>
-            <td>{{ $p->category }}</td>
+            <td>
+                @if($p->category_id == 1)
+                    Baju
+                @elseif($p->category_id == 2)
+                    Celana
+                @elseif($p->category_id == 3)
+                    Jaket
+                @else
+                    -
+                @endif
+            </td>
             <td>{{ $p->color }}</td>
             <td>{{ $p->size }}</td>
             <td>

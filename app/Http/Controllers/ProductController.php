@@ -18,11 +18,6 @@ class ProductController extends Controller
 
         $products = Product::query();
 
-        // Search
-        if ($search) {
-            $products->where('name', 'like', "%$search%");
-        }
-
         // Price Range Filter
         if ($min_price !== null) {
             $products->where('price', '>=', $min_price);
@@ -48,7 +43,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = ['baju', 'celana', 'jacket'];
+        $categories = \App\Models\Category::pluck('name', 'id');
         return view('products.form', compact('categories'));
     }
 
@@ -60,7 +55,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'color'       => 'required|string',
             'size'        => 'required|string',
-            'category'    => 'required|string',
+            'category_id' => 'required',
             'image'       => 'nullable|string',
         ]);
 
@@ -69,12 +64,13 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product added!');
     }
 
+
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        $categories = ['baju', 'celana', 'jacket'];
+        $categories = \App\Models\Category::pluck('name', 'id');
 
-        return view('products.edit', compact('product', 'categories'));
+        return view('products.form', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -85,7 +81,7 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'color'       => 'required|string',
             'size'        => 'required|string',
-            'category'    => 'required|string',
+            'category_id' => 'required',
             'image'       => 'nullable|string',
         ]);
 
@@ -94,6 +90,7 @@ class ProductController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Updated successfully!');
     }
+
 }
 
 
